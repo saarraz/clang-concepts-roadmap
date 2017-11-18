@@ -1,4 +1,4 @@
-# Concepts (P0734R0) Implementation In Clang
+# Concepts ([P0734R0][1]) Implementation in Clang
 Roadmap for implementation of Concepts in the Clang compiler.
 
 ## Roadmap
@@ -73,3 +73,5 @@ Roadmap for implementation of Concepts in the Clang compiler.
 27. Add code to parse RequiresExpr expressions.
 
 28. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
+
+[1]: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0734r0.pdf
