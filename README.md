@@ -2,15 +2,19 @@
 Roadmap for implementation of Concepts in the Clang compiler.
 
 ## Roadmap
+
 1. There are no longer variable and function concepts, and using VarTemplateDecl to represent concepts is unnecessarily complex and would require many workarounds to prevent said variables from actually being instantiated.
    Therefore - remove the support for them (currently there is a flag in TemplateDecl and a 'concept' storage specifier, and a bunch of diagnostics which are no longer relevant).
+> Addressed in D40380
    
-2. Add a new "ConceptTemplateDecl" AST node which represents a concept declaration.
+2. Add a new "ConceptDecl" AST node which represents a concept declaration.
     - inherits from TemplateDecl and not RedeclarableTemplateDecl, because concepts are not redeclarable.
     - stores an Expr * representing the constraint expression in the function's body.
     - has a FoldingSetVector of already "instantiated" concepts with specified arguments called "ConceptSpecialization" which is not a Decl but simply a "cache entry" if you will.
-    
-3. Add code to parse "ConceptTemplateDecl"s.
+> Addressed in D40381
+   
+3. Add code to parse "ConceptDecl"s.
+> Addressed in D40381
 
 4. Add a new "ConceptSpecializationExpr" expression which is a concept name with template arguments, which stores a pointer to ConceptTemplateDecl and a ConceptSpecialization.
     - when a ConceptSpecializationExpr is created without dependent template arguments, it is actually resolved to an existing "ConceptSpecialization" or creates one if it is not yet present.
