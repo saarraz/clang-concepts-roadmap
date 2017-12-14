@@ -9,22 +9,23 @@ Roadmap for implementation of Concepts in the Clang compiler.
    
 2. Add a new "ConceptDecl" AST node which represents a concept declaration.
     - inherits from TemplateDecl and not RedeclarableTemplateDecl, because concepts are not redeclarable.
-    - stores an Expr * representing the constraint expression in the function's body.
-    - has a FoldingSetVector of already "instantiated" concepts with specified arguments called "ConceptSpecialization" which is not a Decl but simply a "cache entry" if you will.
+    - stores an Expr \* representing the constraint expression in the function's body.
 > Addressed in D40381
    
 3. Add code to parse "ConceptDecl"s.
 > Addressed in D40381
 
-4. Add a new "ConceptSpecializationExpr" expression which is a concept name with template arguments, which stores a pointer to ConceptTemplateDecl and a ConceptSpecialization.
-    - when a ConceptSpecializationExpr is created without dependent template arguments, it is actually resolved to an existing "ConceptSpecialization" or creates one if it is not yet present.
+4. Add a new "ConceptSpecializationExpr" expression which is a concept name with template arguments, which stores a pointer to ConceptDecl and a TemplateArgumentListInfo.
+    - when a ConceptSpecializationExpr is created without dependent template arguments, it is evaluated for satisfaction, the value stored within the object.
     - translate during constant evaluation and code generation to a bool.
-  
+> Addressed in D41217
+    
 5. Add code to parse "ConceptSpecializationExpr"s.
+> Addressed in D41217
 
-*  There was already a "RequiresClause" field (by means of TrailingObjects) added to TemplateParameterList.
+-  There was already a "RequiresClause" field (by means of TrailingObjects) added to TemplateParameterList.
    
-*  There was already a "ConstrainedTemplateDeclInfo" struct which contains a TemplateParameterList and a ConstraintExpression added to TemplateDecl. 
+-  There was already a "ConstrainedTemplateDeclInfo" struct which contains a TemplateParameterList and a ConstraintExpression added to TemplateDecl. 
    Keep that for later caching a combined constraint expression with both the requires clause, constraints arising from constrained template parameters (a.k.a template<Callable C>), and from trailing requires clauses on functions (a.k.a void foo() requires sizeof(int) == 4). 
    
 6. Remove ConstrainedTemplateDeclInfo from TemplateDecl constructors and instead create one in the constructor if there are any associated constraints in the TemplateParameterList passed in.
@@ -41,7 +42,7 @@ Roadmap for implementation of Concepts in the Clang compiler.
     
 11. Add code to Sema::getMoreSpecializedTemplate to regard constraint expressions.
   
-12. Create a function which given an Expr * representing a constraint expression known to have not been satisfied, emits diagnostics as to why it wasn't (it would have special cases for BinaryOperators && and ||, as well as ConceptSpecializationExprs).
+12. Create a function which given an Expr \* representing a constraint expression known to have not been satisfied, emits diagnostics as to why it wasn't (it would have special cases for BinaryOperators && and ||, as well as ConceptSpecializationExprs).
     Call this function in TemplateSpecCandidateSet::NoteCandidates when appropriate.
   
 13. Add code to parse a trailing requires-clause in a function declaration.
