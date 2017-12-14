@@ -26,7 +26,7 @@ Roadmap for implementation of Concepts in the Clang compiler.
 -  There was already a "RequiresClause" field (by means of TrailingObjects) added to TemplateParameterList.
    
 -  There was already a "ConstrainedTemplateDeclInfo" struct which contains a TemplateParameterList and a ConstraintExpression added to TemplateDecl. 
-   Keep that for later caching a combined constraint expression with both the requires clause, constraints arising from constrained template parameters (a.k.a template<Callable C>), and from trailing requires clauses on functions (a.k.a void foo() requires sizeof(int) == 4). 
+   Keep that for later caching a combined constraint expression with both the requires clause, constraints arising from constrained template parameters (a.k.a template\<Callable C\>), and from trailing requires clauses on functions (a.k.a void foo() requires sizeof(int) == 4). 
    
 6. Remove ConstrainedTemplateDeclInfo from TemplateDecl constructors and instead create one in the constructor if there are any associated constraints in the TemplateParameterList passed in.
    
