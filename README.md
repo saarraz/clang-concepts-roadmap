@@ -5,23 +5,23 @@ Roadmap for implementation of Concepts in the Clang compiler.
 
 1. There are no longer variable and function concepts, and using VarTemplateDecl to represent concepts is unnecessarily complex and would require many workarounds to prevent said variables from actually being instantiated.
    Therefore - remove the support for them (currently there is a flag in TemplateDecl and a 'concept' storage specifier, and a bunch of diagnostics which are no longer relevant).
-> Addressed in D40380
+> Addressed in [D40380][2]
    
 2. Add a new "ConceptDecl" AST node which represents a concept declaration.
     - inherits from TemplateDecl and not RedeclarableTemplateDecl, because concepts are not redeclarable.
     - stores an Expr \* representing the constraint expression in the function's body.
-> Addressed in D40381
+> Addressed in [D40381][3]
    
 3. Add code to parse "ConceptDecl"s.
-> Addressed in D40381
+> Addressed in [D40381][3]
 
 4. Add a new "ConceptSpecializationExpr" expression which is a concept name with template arguments, which stores a pointer to ConceptDecl and a TemplateArgumentListInfo.
     - when a ConceptSpecializationExpr is created without dependent template arguments, it is evaluated for satisfaction, the value stored within the object.
     - translate during constant evaluation and code generation to a bool.
-> Addressed in D41217
+> Addressed in [D41217][4]
     
 5. Add code to parse "ConceptSpecializationExpr"s.
-> Addressed in D41217
+> Addressed in [D41217][4]
 
 -  There was already a "RequiresClause" field (by means of TrailingObjects) added to TemplateParameterList.
    
@@ -29,13 +29,16 @@ Roadmap for implementation of Concepts in the Clang compiler.
    Keep that for later caching a combined constraint expression with both the requires clause, constraints arising from constrained template parameters (a.k.a template\<Callable C\>), and from trailing requires clauses on functions (a.k.a void foo() requires sizeof(int) == 4). 
    
 6. Remove ConstrainedTemplateDeclInfo from TemplateDecl constructors and instead create one in the constructor if there are any associated constraints in the TemplateParameterList passed in.
-   
+> Addressed in [D41284][5]
+
 7. Add ConstrainedTemplateDeclInfo to VarPartialSpecializationTemplateDecl and ClassPartialSpecializationTemplateDecl as well.
-   
+> Addressed in [D41284][5]
+
 8. Add a function to ClassPartialSpecializationTemplateDecl, VarPartialSpecializationTemplateDecl and TemplateDecl called 
    "getAssociatedConstraints", which will return the total associated constraints, collected from all sources mentioned above (this method will not do any calculation/creation of "and" expressions - the expression should be created in the ctor of said classes if it requires calculation).
-   
-9. Enforce RequiresClause on template specialization in the function: 
+> Addressed in [D41284][5]
+
+9. Enforce RequiresClause on template specialization in the following functions: 
     - CheckTemplateArgumentList which is ran before a primary template is instantiated with arguments.
     - ConvertDeducedTemplateArguments which is ran before partial specializations of all kinds are instantiated with arguments.
     - Both above functions will use a single template function which checks whether a bunch of arguments satisfy the constraints imposed by a 'templatedecl-like' object - it would basically instantiate the constraint expression returned by the object's getAssociatedConstraints() function.
@@ -80,3 +83,7 @@ Roadmap for implementation of Concepts in the Clang compiler.
 28. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
 
 [1]: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0734r0.pdf
+[2]: https://reviews.llvm.org/D40380
+[3]: https://reviews.llvm.org/D40381
+[4]: https://reviews.llvm.org/D41217
+[5]: https://reviews.llvm.org/D41284
