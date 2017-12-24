@@ -42,11 +42,13 @@ Roadmap for implementation of Concepts in the Clang compiler.
     - CheckTemplateArgumentList which is ran before a primary template is instantiated with arguments.
     - ConvertDeducedTemplateArguments which is ran before partial specializations of all kinds are instantiated with arguments.
     - Both above functions will use a single template function which checks whether a bunch of arguments satisfy the constraints imposed by a 'templatedecl-like' object - it would basically instantiate the constraint expression returned by the object's getAssociatedConstraints() function.
-    
+> Addressed in [D41569][6]
+
 11. Add code to Sema::getMoreSpecializedTemplate to regard constraint expressions.
   
 12. Create a function which given an Expr \* representing a constraint expression known to have not been satisfied, emits diagnostics as to why it wasn't (it would have special cases for BinaryOperators && and ||, as well as ConceptSpecializationExprs).
     Call this function in TemplateSpecCandidateSet::NoteCandidates when appropriate.
+> Addressed in [D41569][6]
   
 13. Add code to parse a trailing requires-clause in a function declaration.
    
@@ -87,3 +89,4 @@ Roadmap for implementation of Concepts in the Clang compiler.
 [3]: https://reviews.llvm.org/D40381
 [4]: https://reviews.llvm.org/D41217
 [5]: https://reviews.llvm.org/D41284
+[6]: https://reviews.llvm.org/D41569
