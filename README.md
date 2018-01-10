@@ -43,46 +43,47 @@ Roadmap for implementation of Concepts in the Clang compiler.
     - ConvertDeducedTemplateArguments which is ran before partial specializations of all kinds are instantiated with arguments.
     - Both above functions will use a single template function which checks whether a bunch of arguments satisfy the constraints imposed by a 'templatedecl-like' object - it would basically instantiate the constraint expression returned by the object's getAssociatedConstraints() function.
 > Addressed in [D41569][6]
-
-11. Add code to Sema::getMoreSpecializedTemplate to regard constraint expressions.
   
-12. Create a function which given an Expr \* representing a constraint expression known to have not been satisfied, emits diagnostics as to why it wasn't (it would have special cases for BinaryOperators && and ||, as well as ConceptSpecializationExprs).
+10. Create a function which given an Expr \* representing a constraint expression known to have not been satisfied, emits diagnostics as to why it wasn't (it would have special cases for BinaryOperators && and ||, as well as ConceptSpecializationExprs).
     Call this function in TemplateSpecCandidateSet::NoteCandidates when appropriate.
 > Addressed in [D41569][6]
   
-13. Add code to parse a trailing requires-clause in a function declaration.
+11. Add code to isAtLeastAsSpecializedAs to regard constraint expressions (with partial ordering, subsumption and normalization).
+> Addressed in [D41910][7]
+
+12. Add code to parse a trailing requires-clause in a function declaration.
    
-14. Add a ConstraintExpression field to FunctionDecl, add code to TemplateDecl to take the constraint into account (and store it in the constraint stored in ConstrainedTemplateDeclInfo).
+13. Add a ConstraintExpression field to FunctionDecl, add code to TemplateDecl to take the constraint into account (and store it in the constraint stored in ConstrainedTemplateDeclInfo).
     - Go over all places where FunctionDecls are created and make sure constraints are passed in if needed.
   
-15. Add name mangling for the added ConstraintExpression (which is now part of the signature).
+14. Add name mangling for the added ConstraintExpression (which is now part of the signature).
  
-16. Add ConstraintExpression checking for redeclarations of functions (consider whether or not the ConstraintExpression matches when determining if a function declaration is a redeclaration).
+15. Add ConstraintExpression checking for redeclarations of functions (consider whether or not the ConstraintExpression matches when determining if a function declaration is a redeclaration).
  
-17. Prohibit virtual functions from being declared with constraints.
+16. Prohibit virtual functions from being declared with constraints.
  
-18. Change Sema::IsOverload to regard functions with matching signatures but different constraints as overloads.
+17. Change Sema::IsOverload to regard functions with matching signatures but different constraints as overloads.
     
-19. Make sure functions whose constraints are not satisfied cannot be referenced. We can achieve this by ommitting them from Sema::LookupName when the LookupNameKind is not LookupRedeclarationWithLinkage.
+18. Make sure functions whose constraints are not satisfied cannot be referenced. We can achieve this by ommitting them from Sema::LookupName when the LookupNameKind is not LookupRedeclarationWithLinkage.
     
-20. Change addOverload and addTemplateOverload to disallow adding functions whose constraints are not met.
+19. Change addOverload and addTemplateOverload to disallow adding functions whose constraints are not met.
     
-21. Change isBetter to regard a candidate whose constraints subsume the other to be better.
+20. Change isBetter to regard a candidate whose constraints subsume the other to be better.
 
-22. Add diagnostics to OverloadCandidateSet::NoteCandidates when appropriate.
+21. Add diagnostics to OverloadCandidateSet::NoteCandidates when appropriate.
  
-23. Add a ConstraintExpression field to TypeTemplateParmDecl, TemplateTemplateParmDecl and NonTypeTemplateParmDecl, to represent constraints imposed by 'constrained template parameters' (e.g. things such as template<Callable C>).
+22. Add a ConstraintExpression field to TypeTemplateParmDecl, TemplateTemplateParmDecl and NonTypeTemplateParmDecl, to represent constraints imposed by 'constrained template parameters' (e.g. things such as template<Callable C>).
     
-24. Add a "calculateAssociatedConstraints" function to TemplateParameterList  which returns the requires clause constraint-expression ANDed with all constrained template parameter's cosntraint-expressions, make TemplateDecl, VarPartialSpecializationTemplateDecl and     ClassPartialSpecializationTemplateDecl use this function when calculating the associated constraints in TemplateDecl.
+23. Add a "calculateAssociatedConstraints" function to TemplateParameterList  which returns the requires clause constraint-expression ANDed with all constrained template parameter's cosntraint-expressions, make TemplateDecl, VarPartialSpecializationTemplateDecl and     ClassPartialSpecializationTemplateDecl use this function when calculating the associated constraints in TemplateDecl.
     
-25. Add code to parse constrained template parameters and generate the imposed constraint-expression, storing them in the created 
+24. Add code to parse constrained template parameters and generate the imposed constraint-expression, storing them in the created 
     TemplateParameters.
   
-26. Add a new RequiresExpr expression class (e.g. requires(T t) { t.foo(); }).
+25. Add a new RequiresExpr expression class (e.g. requires(T t) { t.foo(); }).
 
-27. Add code to parse RequiresExpr expressions.
+26. Add code to parse RequiresExpr expressions.
 
-28. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
+27. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
 
 [1]: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0734r0.pdf
 [2]: https://reviews.llvm.org/D40380
@@ -90,3 +91,4 @@ Roadmap for implementation of Concepts in the Clang compiler.
 [4]: https://reviews.llvm.org/D41217
 [5]: https://reviews.llvm.org/D41284
 [6]: https://reviews.llvm.org/D41569
+[7]: https://reviews.llvm.org/D41910
