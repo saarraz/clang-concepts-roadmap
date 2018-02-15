@@ -79,20 +79,18 @@ Roadmap for implementation of Concepts in the Clang compiler.
 20. Change isBetter to regard a candidate whose constraints subsume the other to be better.
 > Addressed in [D43357][8]
 
-21. Add diagnostics to OverloadCandidateSet::NoteCandidates when appropriate.
+21. Add a ConstraintExpression field to TypeTemplateParmDecl, TemplateTemplateParmDecl and NonTypeTemplateParmDecl, to represent constraints imposed by 'constrained template parameters' (e.g. things such as template<Callable C>).
 
-22. Add a ConstraintExpression field to TypeTemplateParmDecl, TemplateTemplateParmDecl and NonTypeTemplateParmDecl, to represent constraints imposed by 'constrained template parameters' (e.g. things such as template<Callable C>).
-
-23. Add a "calculateAssociatedConstraints" function to TemplateParameterList  which returns the requires clause constraint-expression ANDed with all constrained template parameter's cosntraint-expressions, make TemplateDecl, VarPartialSpecializationTemplateDecl and     ClassPartialSpecializationTemplateDecl use this function when calculating the associated constraints in TemplateDecl.
+22. Add a "calculateAssociatedConstraints" function to TemplateParameterList  which returns the requires clause constraint-expression ANDed with all constrained template parameter's cosntraint-expressions, make TemplateDecl, VarPartialSpecializationTemplateDecl and     ClassPartialSpecializationTemplateDecl use this function when calculating the associated constraints in TemplateDecl.
     
-24. Add code to parse constrained template parameters and generate the imposed constraint-expression, storing them in the created 
+23. Add code to parse constrained template parameters and generate the imposed constraint-expression, storing them in the created 
     TemplateParameters.
   
-25. Add a new RequiresExpr expression class (e.g. requires(T t) { t.foo(); }).
+24. Add a new RequiresExpr expression class (e.g. requires(T t) { t.foo(); }).
 
-26. Add code to parse RequiresExpr expressions.
+25. Add code to parse RequiresExpr expressions.
 
-27. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
+26. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
 
 [1]: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0734r0.pdf
 [2]: https://reviews.llvm.org/D40380
