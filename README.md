@@ -52,28 +52,37 @@ Roadmap for implementation of Concepts in the Clang compiler.
 > Addressed in [D41910][7]
 
 12. Add code to parse a trailing requires-clause in a function declaration.
-   
+> Addressed in [D43357][8]
+
 13. Add a ConstraintExpression field to FunctionDecl, add code to TemplateDecl to take the constraint into account (and store it in the constraint stored in ConstrainedTemplateDeclInfo).
     - Go over all places where FunctionDecls are created and make sure constraints are passed in if needed.
+> Addressed in [D43357][8]
   
 14. Add name mangling for the added ConstraintExpression (which is now part of the signature).
- 
+> On hold until itanium decides what the mangling's going to be.
+
 15. Add ConstraintExpression checking for redeclarations of functions (consider whether or not the ConstraintExpression matches when determining if a function declaration is a redeclaration).
+> Addressed in [D43357][8]
  
 16. Prohibit virtual functions from being declared with constraints.
- 
+> Addressed in [D43357][8]
+
 17. Change Sema::IsOverload to regard functions with matching signatures but different constraints as overloads.
-    
-18. Make sure functions whose constraints are not satisfied cannot be referenced. We can achieve this by ommitting them from Sema::LookupName when the LookupNameKind is not LookupRedeclarationWithLinkage.
-    
+> Addressed in [D43357][8]
+
+18. Make sure functions whose constraints are not satisfied cannot be referenced.
+> Addressed in [D43357][8]
+
 19. Change addOverload and addTemplateOverload to disallow adding functions whose constraints are not met.
-    
+> Addressed in [D43357][8]
+
 20. Change isBetter to regard a candidate whose constraints subsume the other to be better.
+> Addressed in [D43357][8]
 
 21. Add diagnostics to OverloadCandidateSet::NoteCandidates when appropriate.
- 
+
 22. Add a ConstraintExpression field to TypeTemplateParmDecl, TemplateTemplateParmDecl and NonTypeTemplateParmDecl, to represent constraints imposed by 'constrained template parameters' (e.g. things such as template<Callable C>).
-    
+
 23. Add a "calculateAssociatedConstraints" function to TemplateParameterList  which returns the requires clause constraint-expression ANDed with all constrained template parameter's cosntraint-expressions, make TemplateDecl, VarPartialSpecializationTemplateDecl and     ClassPartialSpecializationTemplateDecl use this function when calculating the associated constraints in TemplateDecl.
     
 24. Add code to parse constrained template parameters and generate the imposed constraint-expression, storing them in the created 
