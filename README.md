@@ -90,10 +90,13 @@ Roadmap for implementation of Concepts in the Clang compiler.
 > Addressed in [D44352][9]
 
 24. Add a new CXXRequiresExpr expression class (e.g. requires(T t) { t.foo(); }).
+> Addressed in [D50360][10]
 
 25. Add code to parse CXXRequiresExpr expressions.
+> Addressed in [D50360][10]
 
 26. Add code to the diagnostics functions we'd previously implemented to introspect into requires expressions which weren't satisfied to further explain why they weren't.
+> Addressed in [D50360][10]
 
 [1]: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0734r0.pdf
 [2]: https://reviews.llvm.org/D40380
@@ -104,3 +107,4 @@ Roadmap for implementation of Concepts in the Clang compiler.
 [7]: https://reviews.llvm.org/D41910
 [8]: https://reviews.llvm.org/D43357
 [9]: https://reviews.llvm.org/D44352
+[9]: https://reviews.llvm.org/D50360
